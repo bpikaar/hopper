@@ -26,7 +26,9 @@ export class Game {
         this.arcade = new Arcade(this)
 
         this._hud = new Hud(this)
-        this._hud.showHighscore(parseInt(this.getCookie("highscore")))
+        let highscore: number = parseInt(this.getCookie("highscore"))
+        highscore = isNaN(highscore) ? 0 : highscore
+        this._hud.showHighscore(highscore)
         this._hud.showScore("Press a button to start")
 
         // The game must wait for de joysticks to connect

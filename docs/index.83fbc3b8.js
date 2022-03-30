@@ -547,7 +547,9 @@ class Game {
         // create arcade cabinet with 2 joysticks (with 6 buttons)
         this.arcade = new _arcade.Arcade(this);
         this._hud = new _hud.Hud(this);
-        this._hud.showHighscore(parseInt(this.getCookie("highscore")));
+        let highscore = parseInt(this.getCookie("highscore"));
+        highscore = isNaN(highscore) ? 0 : highscore;
+        this._hud.showHighscore(highscore);
         this._hud.showScore("Press a button to start");
         // The game must wait for de joysticks to connect
         this.joystickListener = (e)=>this.initJoystick(e)
