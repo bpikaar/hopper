@@ -5,6 +5,10 @@
 Hopper is a game about jumping. Keep jumping on the trampolines to increase your score.
 To play the game you need a gamepad, for example a joystick or ps4 controller.
 
+demo: [https://bpikaar.github.io/hopper/](https://bpikaar.github.io/hopper/)
+
+<br>
+
 This project uses **_PixiJS and Typescript_**. You'll need
 
 - [NodeJS](https://nodejs.org/en/)
