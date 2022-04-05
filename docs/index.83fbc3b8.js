@@ -37140,6 +37140,9 @@ class Jumper extends _gameobject.GameObject {
         this.startY = y;
         this.drawShape();
         this.highscore = parseInt(this.game.getCookie("highscore"));
+    // this.game.pixi.loader
+    //     .add('spritesheet', 'cat_spritesheet_205_313.png')
+    //     .load(() => onAssetsLoaded());
     }
     drawShape() {
         let graphic = new _pixiJs.Graphics();
@@ -37157,6 +37160,24 @@ class Jumper extends _gameobject.GameObject {
         this.sprite.anchor.set(0.5, 0.5);
         this.sprite.x = this.startX;
         this.sprite.y = this.startY;
+        _pixiJs.Loader.shared.add("spritesheet.json").onComplete.once((e)=>this.loaded(e)
+        );
+        _pixiJs.Loader.shared.load();
+    // this.game.pixi.loader
+    //     .add("images/spritesheet.json")
+    //     .load((e) => this.loaded(e));
+    }
+    loaded(e) {
+        console.log(e);
+        // get a reference to the sprite sheet we've just loaded:
+        let sheet = _pixiJs.Loader.shared.resources["spritesheet.json"].spritesheet;
+        console.log(sheet);
+        // create an animated sprite
+        let poes = new _pixiJs.AnimatedSprite(sheet.animations["poes"]);
+        // set speed, start playback and add it to the stage
+        poes.animationSpeed = 0.167;
+        poes.play();
+        this.game.pixi.stage.addChild(poes);
     }
     update() {
         if (this.joystick.Left) {
@@ -37208,6 +37229,28 @@ class Jumper extends _gameobject.GameObject {
         this.y = height;
         // keep the ball bouncing without loss
         this.speedY *= -this.bounce;
+    }
+    onAssetsLoaded() {
+        // create an array to store the textures
+        const explosionTextures = [];
+        let i;
+        for(i = 0; i < 26; i++){
+            const texture = _pixiJs.Texture.from(`Explosion_Sequence_A ${i + 1}.png`);
+            explosionTextures.push(texture);
+        }
+        for(i = 0; i < 50; i++){
+            // create an explosion AnimatedSprite
+            const explosion = new _pixiJs.AnimatedSprite(explosionTextures);
+            explosion.x = Math.random() * this.game.pixi.screen.width;
+            explosion.y = Math.random() * this.game.pixi.screen.height;
+            explosion.anchor.set(0.5);
+            explosion.rotation = Math.random() * Math.PI;
+            explosion.scale.set(0.75 + Math.random() * 0.5);
+            explosion.gotoAndPlay(Math.random() * 27);
+            this.game.pixi.stage.addChild(explosion);
+        }
+        // start animating
+        this.game.pixi.start();
     }
 }
 

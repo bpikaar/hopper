@@ -19,7 +19,7 @@ export class Game {
 
     constructor() {
         // this._pixi = new PIXI.Application({ width: 1440, height: 900 })
-        this._pixi = new PIXI.Application({ width: 800, height: 600, backgroundColor: 0x1099bb })
+        this._pixi = new PIXI.Application({ width: 1440, height: 900, backgroundColor: 0x1099bb })
         document.body.appendChild(this._pixi.view)
 
         // create arcade cabinet with 2 joysticks (with 6 buttons)
@@ -96,25 +96,28 @@ export class Game {
     }
 
     public setCookie(cname: string, cvalue: string, exdays = 365): void {
-        const d = new Date();
-        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-        let expires = "expires=" + d.toUTCString();
-        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        localStorage.setItem(cname, cvalue)
+        // const d = new Date();
+        // d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        // let expires = "expires=" + d.toUTCString();
+        // document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
     }
 
     public getCookie(cname: string): string {
-        let name = cname + "=";
-        let decodedCookie = decodeURIComponent(document.cookie);
-        let ca = decodedCookie.split(';');
-        for (let i = 0; i < ca.length; i++) {
-            let c = ca[i];
-            while (c.charAt(0) == ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) == 0) {
-                return c.substring(name.length, c.length);
-            }
-        }
-        return "";
+        return localStorage.getItem(cname)
+
+        // let name = cname + "=";
+        // let decodedCookie = decodeURIComponent(document.cookie);
+        // let ca = decodedCookie.split(';');
+        // for (let i = 0; i < ca.length; i++) {
+        //     let c = ca[i];
+        //     while (c.charAt(0) == ' ') {
+        //         c = c.substring(1);
+        //     }
+        //     if (c.indexOf(name) == 0) {
+        //         return c.substring(name.length, c.length);
+        //     }
+        // }
+        // return "";
     }
 }
