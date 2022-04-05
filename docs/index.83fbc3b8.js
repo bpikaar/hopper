@@ -539,8 +539,8 @@ class Game {
     constructor(){
         // this._pixi = new PIXI.Application({ width: 1440, height: 900 })
         this._pixi = new _pixiJs.Application({
-            width: 800,
-            height: 600,
+            width: 1440,
+            height: 900,
             backgroundColor: 1087931
         });
         document.body.appendChild(this._pixi.view);
@@ -598,21 +598,27 @@ class Game {
         document.removeEventListener("joystickcreated", this.joystickListener);
     }
     setCookie(cname, cvalue, exdays = 365) {
-        const d = new Date();
-        d.setTime(d.getTime() + exdays * 86400000);
-        let expires = "expires=" + d.toUTCString();
-        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        localStorage.setItem(cname, cvalue);
+    // const d = new Date();
+    // d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    // let expires = "expires=" + d.toUTCString();
+    // document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
     }
     getCookie(cname) {
-        let name = cname + "=";
-        let decodedCookie = decodeURIComponent(document.cookie);
-        let ca = decodedCookie.split(';');
-        for(let i = 0; i < ca.length; i++){
-            let c = ca[i];
-            while(c.charAt(0) == ' ')c = c.substring(1);
-            if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
-        }
-        return "";
+        return localStorage.getItem(cname);
+    // let name = cname + "=";
+    // let decodedCookie = decodeURIComponent(document.cookie);
+    // let ca = decodedCookie.split(';');
+    // for (let i = 0; i < ca.length; i++) {
+    //     let c = ca[i];
+    //     while (c.charAt(0) == ' ') {
+    //         c = c.substring(1);
+    //     }
+    //     if (c.indexOf(name) == 0) {
+    //         return c.substring(name.length, c.length);
+    //     }
+    // }
+    // return "";
     }
 }
 
@@ -37160,9 +37166,10 @@ class Jumper extends _gameobject.GameObject {
         this.sprite.anchor.set(0.5, 0.5);
         this.sprite.x = this.startX;
         this.sprite.y = this.startY;
-        _pixiJs.Loader.shared.add("spritesheet.json").onComplete.once((e)=>this.loaded(e)
-        );
-        _pixiJs.Loader.shared.load();
+    // PIXI.Loader.shared
+    //     .add("spritesheet.json")
+    //     .onComplete.once((e) => this.loaded(e))
+    // PIXI.Loader.shared.load()
     // this.game.pixi.loader
     //     .add("images/spritesheet.json")
     //     .load((e) => this.loaded(e));
