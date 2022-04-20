@@ -36,6 +36,9 @@ export class Jumper extends GameObject {
 
         this.highscore = parseInt(this.game.getCookie("highscore"))
 
+        // Keyboard input
+        window.addEventListener("keydown", (e) => this.onKeyDown(e));
+        window.addEventListener("keyup", (e) => this.onKeyUp(e));
 
         // this.game.pixi.loader
         //     .add('spritesheet', 'cat_spritesheet_205_313.png')
@@ -86,19 +89,34 @@ export class Jumper extends GameObject {
         poes.play();
         this.game.pixi.stage.addChild(poes);
     }
+
+    private onKeyDown(event: KeyboardEvent) {
+        event.preventDefault()
+        if (event.key === "ArrowLeft") this.moveLeft()
+        if (event.key === "ArrowRight") this.moveRight()
+    }
+    private onKeyUp(event: KeyboardEvent) {
+    }
+
     public update(): void {
-        if (this.joystick.Left) {
-            this.x -= Math.abs(this.speedX) + this.horizontalSpeed
-            this.speedX = -(Math.abs(this.speedX))
-        }
-        else if (this.joystick.Right) {
-            this.x += Math.abs(this.speedX) + this.horizontalSpeed
-            this.speedX = Math.abs(this.speedX)
+        if (this.joystick) {
+            if (this.joystick.Left) this.moveLeft()
+            else if (this.joystick.Right) this.moveRight()
         }
 
         this.fall()
 
         this.keepInScreen()
+    }
+
+    private moveLeft() {
+        this.x -= Math.abs(this.speedX) + this.horizontalSpeed
+        this.speedX = -(Math.abs(this.speedX))
+    }
+
+    private moveRight() {
+        this.x += Math.abs(this.speedX) + this.horizontalSpeed
+        this.speedX = Math.abs(this.speedX)
     }
 
     private keepInScreen() {

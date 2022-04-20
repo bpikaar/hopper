@@ -18,14 +18,16 @@ export class Game {
     public get hud(): Hud { return this._hud }
 
     constructor() {
-        // this._pixi = new PIXI.Application({ width: 1440, height: 900 })
+
         this._pixi = new PIXI.Application({ width: 1440, height: 900, backgroundColor: 0x1099bb })
+        this._pixi = new PIXI.Application({ width: 800, height: 600, backgroundColor: 0x1099bb })
         document.body.appendChild(this._pixi.view)
 
         // create arcade cabinet with 2 joysticks (with 6 buttons)
         this.arcade = new Arcade(this)
 
         this._hud = new Hud(this)
+        console.log(this.getCookie("highscore"))
         let highscore: number = parseInt(this.getCookie("highscore"))
         highscore = isNaN(highscore) ? 0 : highscore
         this._hud.showHighscore(highscore)
@@ -35,6 +37,9 @@ export class Game {
         this.joystickListener = (e: Event) => this.initJoystick(e as CustomEvent)
         document.addEventListener("joystickcreated", this.joystickListener)
 
+        // test
+        this.gameObjects.push(new Jumper(this, null, 100, 100))
+        this.startGame()
         // this.jumper = new Jumper(this, null)
         // start update loop
         this.pixi.ticker.add((delta) => this.update())
@@ -84,8 +89,9 @@ export class Game {
             document.addEventListener(buttonEvent, () => console.log(buttonEvent))
         }
 
-        this.gameObjects.push(new Jumper(this, joystick, 100, 100))
-        this.startGame()
+        // this.gameObjects.push(new Jumper(this, joystick, 100, 100))
+        // this.startGame()
+
         // alternatively you can handle single buttons
         // Handle button 0 (this is the first button, X-Button on a PS4 controller)
         // document.addEventListener(joystick.ButtonEvents[0], () => this.handleJump())
@@ -103,8 +109,10 @@ export class Game {
         // document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
     }
 
-    public getCookie(cname: string): string {
-        return localStorage.getItem(cname)
+    public getCookie(cname: string): string | "0" {
+        // localStorage.setItem(cname, String(10))
+        // console.log(localStorage.getItem(cname))
+        return localStorage.getItem(cname) ?? "0"
 
         // let name = cname + "=";
         // let decodedCookie = decodeURIComponent(document.cookie);
