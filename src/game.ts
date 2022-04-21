@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js'
 import { Arcade } from './arcade/arcade'
+import { Assets } from './assets'
 import { GameObject } from './gameobject'
 import { Hud } from './hud'
 import { Jumper } from './jumper'
@@ -23,11 +24,13 @@ export class Game {
         this._pixi = new PIXI.Application({ width: 800, height: 600, backgroundColor: 0x1099bb })
         document.body.appendChild(this._pixi.view)
 
+        let assets = new Assets(this)
+    }
+    public loadCompleted() {
         // create arcade cabinet with 2 joysticks (with 6 buttons)
         this.arcade = new Arcade(this)
 
         this._hud = new Hud(this)
-        console.log(this.getCookie("highscore"))
         let highscore: number = parseInt(this.getCookie("highscore"))
         highscore = isNaN(highscore) ? 0 : highscore
         this._hud.showHighscore(highscore)

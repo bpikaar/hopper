@@ -4,7 +4,6 @@ import { Game } from './game'
 import { GameObject } from './gameobject'
 import { Hud } from './hud'
 import { Trampoline } from './trampoline'
-import spritesheet from './images/spritesheet.json'
 
 export class Jumper extends GameObject {
     private readonly WIDTH: number = 50
@@ -13,6 +12,7 @@ export class Jumper extends GameObject {
     private readonly bounce: number = 0.95
     private readonly horizontalSpeed: number = 0
 
+    private animSprite: PIXI.AnimatedSprite
     private game: Game
     private startX: number = 100
     private startY: number = 100
@@ -25,6 +25,8 @@ export class Jumper extends GameObject {
     private hud: Hud
     private highscore: number
 
+
+
     constructor(game: Game, joystick: Joystick, x: number, y: number) {
         super()
         this.game = game
@@ -32,17 +34,13 @@ export class Jumper extends GameObject {
         this.startX = x
         this.startY = y
 
-        this.drawShape()
+        // this.drawShape()
+        this.animation()
 
         this.highscore = parseInt(this.game.getCookie("highscore"))
 
         // Keyboard input
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
-        window.addEventListener("keyup", (e) => this.onKeyUp(e));
-
-        // this.game.pixi.loader
-        //     .add('spritesheet', 'cat_spritesheet_205_313.png')
-        //     .load(() => onAssetsLoaded());
     }
 
     private drawShape(): void {
@@ -62,40 +60,39 @@ export class Jumper extends GameObject {
         this.sprite = new PIXI.Sprite(texture)
         this.game.pixi.stage.addChild(this.sprite)
 
-        this.sprite.anchor.set(0.5, 0.5)
+        this.sprite.anchor.set(0.5)
         this.sprite.x = this.startX
         this.sprite.y = this.startY
-
-        // PIXI.Loader.shared
-        //     .add("spritesheet.json")
-        //     .onComplete.once((e) => this.loaded(e))
-
-        // PIXI.Loader.shared.load()
-        // this.game.pixi.loader
-        //     .add("images/spritesheet.json")
-        //     .load((e) => this.loaded(e));
     }
+    private animation() {
+        // create an array of textures from an image path
+        const frames = [];
 
-    private loaded(e) {
-        console.log(e)
-        // get a reference to the sprite sheet we've just loaded:
-        let sheet = PIXI.Loader.shared.resources["spritesheet.json"].spritesheet;
-        console.log(sheet)
-        // create an animated sprite
-        let poes = new PIXI.AnimatedSprite(sheet.animations["poes"])
+        for (let i = 1; i <= 39; i++) {
+            // magically works since the spritesheet was loaded with the pixi loader
+            frames.push(PIXI.Texture.from(`poes_${i}.png`));
+        }
+        // create an AnimatedSprite (brings back memories from the days of Flash, right ?)
+        this.animSprite = new PIXI.AnimatedSprite(frames);
+        this.sprite = this.animSprite
+        /*
+         * An AnimatedSprite inherits all the properties of a PIXI sprite
+         * so you can change its position, its anchor, mask it, etc
+         */
+        this.animSprite.x = this.startX
+        this.animSprite.y = this.startY
+        this.animSprite.scale.set(0.7)
+        this.animSprite.anchor.set(0.5);
+        this.animSprite.animationSpeed = 0.2;
+        this.animSprite.play();
 
-        // set speed, start playback and add it to the stage
-        poes.animationSpeed = 0.167;
-        poes.play();
-        this.game.pixi.stage.addChild(poes);
+        this.game.pixi.stage.addChild(this.animSprite);
     }
 
     private onKeyDown(event: KeyboardEvent) {
         event.preventDefault()
         if (event.key === "ArrowLeft") this.moveLeft()
         if (event.key === "ArrowRight") this.moveRight()
-    }
-    private onKeyUp(event: KeyboardEvent) {
     }
 
     public update(): void {
@@ -161,33 +158,6 @@ export class Jumper extends GameObject {
         this.y = height
         // keep the ball bouncing without loss
         this.speedY *= -this.bounce
-    }
-
-    private onAssetsLoaded() {
-        // create an array to store the textures
-        const explosionTextures = [];
-        let i;
-
-        for (i = 0; i < 26; i++) {
-            const texture = PIXI.Texture.from(`Explosion_Sequence_A ${i + 1}.png`);
-            explosionTextures.push(texture);
-        }
-
-        for (i = 0; i < 50; i++) {
-            // create an explosion AnimatedSprite
-            const explosion = new PIXI.AnimatedSprite(explosionTextures);
-
-            explosion.x = Math.random() * this.game.pixi.screen.width;
-            explosion.y = Math.random() * this.game.pixi.screen.height;
-            explosion.anchor.set(0.5);
-            explosion.rotation = Math.random() * Math.PI;
-            explosion.scale.set(0.75 + Math.random() * 0.5);
-            explosion.gotoAndPlay(Math.random() * 27);
-            this.game.pixi.stage.addChild(explosion);
-        }
-
-        // start animating
-        this.game.pixi.start();
     }
 }
 

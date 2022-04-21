@@ -3,8 +3,8 @@
     "version": "1.0.0",
     "description": "Dit is een startproject voor het werken met PixiJS, Typescript en OOP. Je kan deze repository downloaden en vervolgens installeren met:",
     "scripts": {
-        "start": "parcel src/index.html --dist-dir docs",
-        "build": "parcel build src/index.html --dist-dir docs --public-url ./"
+        "start": "cp -a ./src/assets/. ./docs/ && parcel src/index.html --dist-dir docs",
+        "build": "cp -a ./src/assets/. ./docs/ && parcel build src/index.html --dist-dir docs --public-url ./"
     },
     "keywords": [],
     "author": "",
