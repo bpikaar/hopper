@@ -21,7 +21,7 @@ export class Game {
     constructor() {
 
         this._pixi = new PIXI.Application({ width: 1440, height: 900, backgroundColor: 0x1099bb })
-        this._pixi = new PIXI.Application({ width: 800, height: 600, backgroundColor: 0x1099bb })
+        // this._pixi = new PIXI.Application({ width: 800, height: 600, backgroundColor: 0x1099bb })
         document.body.appendChild(this._pixi.view)
 
         let assets = new Assets(this)
@@ -41,8 +41,8 @@ export class Game {
         document.addEventListener("joystickcreated", this.joystickListener)
 
         // test
-        this.gameObjects.push(new Jumper(this, null, 100, 100))
-        this.startGame()
+        // this.gameObjects.push(new Jumper(this, null, 100, 100))
+        // this.startGame()
         // this.jumper = new Jumper(this, null)
         // start update loop
         this.pixi.ticker.add((delta) => this.update())
@@ -92,8 +92,8 @@ export class Game {
             document.addEventListener(buttonEvent, () => console.log(buttonEvent))
         }
 
-        // this.gameObjects.push(new Jumper(this, joystick, 100, 100))
-        // this.startGame()
+        this.gameObjects.push(new Jumper(this, joystick, 100, 100))
+        this.startGame()
 
         // alternatively you can handle single buttons
         // Handle button 0 (this is the first button, X-Button on a PS4 controller)

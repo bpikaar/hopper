@@ -5,21 +5,21 @@ type AssetFile = { name: string, url: string }
 
 export class Assets extends PIXI.Loader {
 
-    private game: Game
+    // private game: Game
     private assets: AssetFile[] = []
 
     constructor(game: Game) {
         super()
-        this.game = game
+        // this.game = game
 
         this.assets = [
             { name: "spritesheetJson", url: "spritesheet.json" },
         ]
-        
+
         this.assets.forEach(asset => {
             this.add(asset.name, asset.url)
         })
 
-        this.load(() => this.game.loadCompleted())
+        this.load(() => game.loadCompleted())
     }
 }
