@@ -160,6 +160,3 @@ export class Jumper extends GameObject {
         this.speedY *= -this.bounce
     }
 }
-
-
-

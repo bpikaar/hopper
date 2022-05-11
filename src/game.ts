@@ -20,7 +20,8 @@ export class Game {
 
     constructor() {
 
-        this._pixi = new PIXI.Application({ width: 1440, height: 900, backgroundColor: 0x1099bb })
+        this._pixi = new PIXI.Application({ width: 1440, height: 900, backgroundColor: 0x1099bb, forceCanvas: true })
+
         // this._pixi = new PIXI.Application({ width: 800, height: 600, backgroundColor: 0x1099bb })
         document.body.appendChild(this._pixi.view)
 
